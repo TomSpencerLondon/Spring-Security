@@ -173,7 +173,55 @@ Again, this is not best practice and is in fact deprecated. BCrypt is better pra
 
 ### JDBC Authentication schema, users, password and role
 
-Now we will learn about JDBC based authentication:
+Now we will learn about JDBC based authentication. This video was useful for configuring Jdbc security connection:
+https://github.dev/danvega/jdbc-users
+
+https://www.youtube.com/watch?v=d7ZmZFbE_qY
+
+This was my configuration:
+```java
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfigurationWithJDBC {
+
+    @Bean
+    DataSource dataSource() {
+        SimpleDriverDataSourceFactory factory = new SimpleDriverDataSourceFactory();
+        return new EmbeddedDatabaseBuilder()
+                .setType(EmbeddedDatabaseType.H2)
+                .setDataSourceFactory(factory)
+                .setName("dashboard")
+                .addScript(JdbcDaoImpl.DEFAULT_USER_SCHEMA_DDL_LOCATION)
+                .build();
+    }
+
+    @Bean
+    JdbcUserDetailsManager users(DataSource dataSource, PasswordEncoder encoder) {
+		UserDetails user = User.builder().username("samarth").password(passwordEncoder().encode("samarth"))
+				.roles("STORE_OWNER").build();
+
+        UserDetails admin = User.builder().username("rohan").password(passwordEncoder().encode("rohan"))
+				.roles("STORE_CLERK").build();
+
+        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
+        jdbcUserDetailsManager.createUser(user);
+        jdbcUserDetailsManager.createUser(user);
+        return jdbcUserDetailsManager;
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+	public WebSecurityCustomizer webSecurityCustomizer() {
+		return (web) -> web.ignoring().requestMatchers(toH2Console());
+	}
+}
+
+```
 
 
 
