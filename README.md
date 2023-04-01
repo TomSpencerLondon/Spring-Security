@@ -1,5 +1,7 @@
 
 ### Spring Boot Security Topics
+https://github.com/sam253narula/Spring-Boot-Security-3.0.2
+
 1. Introduction and Basic Concepts
 - what is security?
     - Hardware security
@@ -110,3 +112,68 @@ public class SecurityConfigurationWithInMemory {
 
 }
 ```
+Here we use the PasswordEncoder to get rid of the following exception:
+```bash
+java.lang.IllegalArgumentException: There is no Password Encoder mapped for the id "null".
+```
+The PasswordEncoder is kept in org.springframework.crypto.password:
+https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/crypto/password/PasswordEncoder.html
+
+This article is quite good on the PasswordEncoder:
+https://www.baeldung.com/spring-security-5-default-password-encoder
+
+We add the following to ignore SpringBoot security with h2:
+```java
+@EnableWebSecurity
+@Configuration
+public class SecurityConfigurationWithInMemory {
+  @Bean
+  public WebSecurityCustomizer webSecurityCustomizer() {
+    return (web) -> web.ignoring().requestMatchers(toH2Console());
+  }
+}
+
+```
+
+
+#### Encrypting passwords with Bcrypt
+Bcrypt is a password encoder used to encrypt passwords. It is a one way password encoder. The password encrypted with
+password encoder cannot be decrypted into ordinary text. Instead we encrypt original password and compare the two hashes.
+
+```java
+import lombok.extern.slf4j.Slf4j;
+
+@EnableWebSecurity
+@Configuration
+@Slf4j
+public class SecurityConfigurationWithInMemory {
+
+  @Bean
+  public UserDetailsService users() {
+    UserDetails user = User.builder().username("samarth").password(getPasswordEncoder().encode("samarth"))
+            .roles("STORE_OWNER").build();
+    log.info("Hashed  password" + getPasswordEncoder().encode("samarth"));
+    UserDetails admin = User.builder().username("rohan").password(getPasswordEncoder().encode("rohan"))
+            .roles("STORE_CLERK").build();
+    return new InMemoryUserDetailsManager(user, admin);
+  }
+}
+```
+The above code takes the password given and compares the two hashes between the password given and the password stored in
+memory. We can see the password in the logs:
+```bash
+2023-04-01T09:38:58.095+01:00  INFO 159663 --- [  restartedMain] .e.s.c.SecurityConfigurationWithInMemory : Hashed  password$2a$10$wy/G.aCMv7TGPjO7eioei.hTV9/XpSvVnfEDua5eN3/EejKRzmYMm
+```
+This is just for demo purposes. We should not log passwords in production. If we didn't want to implement password encoding
+we would use:
+```bash
+NoOpsPasswordEncoder.getInstance()
+```
+Again, this is not best practice and is in fact deprecated. BCrypt is better practice.
+
+### JDBC Authentication schema, users, password and role
+
+Now we will learn about JDBC based authentication:
+
+
+

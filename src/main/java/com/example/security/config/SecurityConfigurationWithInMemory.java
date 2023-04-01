@@ -1,5 +1,6 @@
 package com.example.security.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -15,29 +16,33 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 
 @EnableWebSecurity
 @Configuration
+@Slf4j
 public class SecurityConfigurationWithInMemory {
-
-	@Bean
-	public UserDetailsService users() {
-		UserDetails user = User.builder().username("samarth").password(getPasswordEncoder().encode("samarth"))
-				.roles("STORE_OWNER").build();
-		UserDetails admin = User.builder().username("rohan").password(getPasswordEncoder().encode("rohan"))
-				.roles("STORE_CLERK").build();
-		return new InMemoryUserDetailsManager(user, admin);
-	}
-
-	// If you don't want to encode the created password, you can write the below
-	// bean method
-	// FYI: not recommended for Prod env
-	@Bean
-	PasswordEncoder getPasswordEncoder() {
-//		return NoOpPasswordEncoder.getInstance();
-		return new BCryptPasswordEncoder();
-	}
-
-	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> web.ignoring().requestMatchers(toH2Console());
-	}
+//
+//	@Bean
+//	public UserDetailsService users() {
+//		UserDetails user = User.builder().username("samarth").password(getPasswordEncoder().encode("samarth"))
+//				.roles("STORE_OWNER").build();
+//
+//		log.info("Hashed  password" + getPasswordEncoder().encode("samarth"));
+//
+//		UserDetails admin = User.builder().username("rohan").password(getPasswordEncoder().encode("rohan"))
+//				.roles("STORE_CLERK").build();
+//		return new InMemoryUserDetailsManager(user, admin);
+//	}
+//
+//	// If you don't want to encode the created password, you can write the below
+//	// bean method
+//	// FYI: not recommended for Prod env
+//	@Bean
+//	PasswordEncoder getPasswordEncoder() {
+////		return NoOpPasswordEncoder.getInstance();
+//		return new BCryptPasswordEncoder();
+//	}
+//
+//	@Bean
+//	public WebSecurityCustomizer webSecurityCustomizer() {
+//		return (web) -> web.ignoring().requestMatchers(toH2Console());
+//	}
 
 }
