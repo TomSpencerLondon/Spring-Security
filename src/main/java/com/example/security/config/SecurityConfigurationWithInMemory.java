@@ -1,31 +1,26 @@
 package com.example.security.config;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-
-import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
-
-@EnableWebSecurity
-@Configuration
-@Slf4j
-public class SecurityConfigurationWithInMemory {
+//import org.springframework.context.annotation.Bean;
+//import org.springframework.context.annotation.Configuration;
+//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+//import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+//import org.springframework.security.core.userdetails.User;
+//import org.springframework.security.core.userdetails.UserDetails;
+//import org.springframework.security.core.userdetails.UserDetailsService;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+//
+//import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
+//
+//@EnableWebSecurity
+//@Configuration
+//public class SecurityConfigurationWithInMemory {
 //
 //	@Bean
 //	public UserDetailsService users() {
 //		UserDetails user = User.builder().username("samarth").password(getPasswordEncoder().encode("samarth"))
 //				.roles("STORE_OWNER").build();
-//
-//		log.info("Hashed  password" + getPasswordEncoder().encode("samarth"));
-//
 //		UserDetails admin = User.builder().username("rohan").password(getPasswordEncoder().encode("rohan"))
 //				.roles("STORE_CLERK").build();
 //		return new InMemoryUserDetailsManager(user, admin);
@@ -44,5 +39,5 @@ public class SecurityConfigurationWithInMemory {
 //	public WebSecurityCustomizer webSecurityCustomizer() {
 //		return (web) -> web.ignoring().requestMatchers(toH2Console());
 //	}
-
-}
+//
+//}
